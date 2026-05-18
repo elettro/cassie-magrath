@@ -629,6 +629,17 @@
   }
   footer a:hover { color: var(--gold); }
   .footer-links { display: flex; gap: 24px; }
+  .footer-credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-credit img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    vertical-align: middle;
+  }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
@@ -709,6 +720,9 @@
     .footer-links {
       gap: 12px;
       flex-wrap: wrap;
+      justify-content: center;
+    }
+    .footer-credit {
       justify-content: center;
     }
   }
@@ -1087,6 +1101,10 @@
 <!-- FOOTER -->
 <footer>
   <span>© 2026 Cassie Magrath. All rights reserved.</span>
+  <a class="footer-credit" href="https://elettro.com" target="_blank" rel="noopener noreferrer">
+    Website produced by Elettro &reg;
+    <img src="images/elettro.png" alt="Elettro logo">
+  </a>
   <div class="footer-links">
     <a href="https://resumes.actorsaccess.com/Cassiem" target="_blank" rel="noopener noreferrer">Actors Access</a>
     <a href="https://m.imdb.com/name/nm14551298/" target="_blank" rel="noopener noreferrer">IMDB</a>
