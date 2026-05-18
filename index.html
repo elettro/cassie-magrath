@@ -179,6 +179,38 @@
     overflow: hidden;
     background: var(--cream);
   }
+  .hero-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(245,240,232,0.6);
+    border-radius: 999px;
+    background: rgba(26,23,20,0.22);
+    color: rgba(250,248,244,0.88);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: background 0.2s, opacity 0.2s, transform 0.2s;
+    opacity: 0.7;
+    z-index: 2;
+    backdrop-filter: blur(2px);
+  }
+  .hero-nav-btn:hover {
+    opacity: 1;
+    background: rgba(26,23,20,0.35);
+    transform: translateY(-50%) scale(1.02);
+  }
+  .hero-nav-btn:focus-visible {
+    outline: 2px solid rgba(212,170,114,0.8);
+    outline-offset: 2px;
+    opacity: 1;
+  }
+  .hero-nav-prev { left: 14px; }
+  .hero-nav-next { right: 14px; }
   .hero-image img {
     width: 100%;
     height: 100%;
@@ -701,10 +733,12 @@
     </div>
     <div class="hero-image">
       <!-- Primary headshot from GitHub repo -->
+      <button class="hero-nav-btn hero-nav-prev" id="hero-prev-btn" aria-label="Previous photo">‹</button>
       <img id="hero-rotating-image"
            src="images/cassie-magrath- (2).jpeg"
            alt="Cassie Magrath – Headshot"
            onerror="this.src='https://cassiemagrath.com/wp-content/uploads/2024/03/image0-768x1156.jpeg'">
+      <button class="hero-nav-btn hero-nav-next" id="hero-next-btn" aria-label="Next photo">›</button>
     </div>
   </div>
 </section>
@@ -1084,9 +1118,63 @@
   ];
 
   const heroImage = document.getElementById("hero-rotating-image");
+  const heroImageContainer = heroImage ? heroImage.closest(".hero-image") : null;
+  const heroPrevBtn = document.getElementById("hero-prev-btn");
+  const heroNextBtn = document.getElementById("hero-next-btn");
   if (heroImage) {
     let heroImageIndex = 0;
-    setInterval(() => {
+    let rotationTimer;
+    let touchStartX = 0;
+    const swipeThreshold = 35;
+
+    const renderHeroImage = () => {
+      heroImage.src = heroRotationImages[heroImageIndex];
+    };
+
+    const goToNextHeroImage = () => {
+      heroImageIndex = (heroImageIndex + 1) % heroRotationImages.length;
+      renderHeroImage();
+    };
+
+    const goToPrevHeroImage = () => {
+      heroImageIndex = (heroImageIndex - 1 + heroRotationImages.length) % heroRotationImages.length;
+      renderHeroImage();
+    };
+
+    const restartHeroTimer = () => {
+      clearInterval(rotationTimer);
+      rotationTimer = setInterval(goToNextHeroImage, 4000);
+    };
+
+    heroPrevBtn?.addEventListener("click", () => {
+      goToPrevHeroImage();
+      restartHeroTimer();
+    });
+
+    heroNextBtn?.addEventListener("click", () => {
+      goToNextHeroImage();
+      restartHeroTimer();
+    });
+
+    heroImageContainer?.addEventListener("touchstart", (event) => {
+      touchStartX = event.touches[0].clientX;
+    }, { passive: true });
+
+    heroImageContainer?.addEventListener("touchend", (event) => {
+      const touchEndX = event.changedTouches[0].clientX;
+      const deltaX = touchEndX - touchStartX;
+
+      if (Math.abs(deltaX) < swipeThreshold) return;
+
+      if (deltaX < 0) {
+        goToNextHeroImage();
+      } else {
+        goToPrevHeroImage();
+      }
+      restartHeroTimer();
+    }, { passive: true });
+
+    rotationTimer = setInterval(() => {
       heroImageIndex = (heroImageIndex + 1) % heroRotationImages.length;
       heroImage.src = heroRotationImages[heroImageIndex];
     }, 4000);
