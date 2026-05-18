@@ -645,7 +645,8 @@
     </div>
     <div class="hero-image">
       <!-- Primary headshot from GitHub repo -->
-      <img src="https://raw.githubusercontent.com/elettro/cassie-magrath/main/images/cassie-magrath-%20(1).jpeg"
+      <img id="hero-rotating-image"
+           src="images/cassie-magrath- (1).jpeg"
            alt="Cassie Magrath – Headshot"
            onerror="this.src='https://cassiemagrath.com/wp-content/uploads/2024/03/image0-768x1156.jpeg'">
     </div>
@@ -830,6 +831,12 @@
     <div class="gallery-slot tall">
       <img src="https://raw.githubusercontent.com/elettro/cassie-magrath/main/images/cassie-magrath-%20(2).jpeg" alt="Cassie Magrath Headshot" onerror="this.parentElement.innerHTML='<div class=\'placeholder\'>Photo</div>'">
     </div>
+    <div class="gallery-slot tall">
+      <img src="images/cassie-magrath- (2).jpg" alt="Cassie Magrath Headshot" onerror="this.parentElement.innerHTML='<div class=\'placeholder\'>Photo</div>'">
+    </div>
+    <div class="gallery-slot tall">
+      <img src="images/cassie-magrath- (1).jpg" alt="Cassie Magrath Headshot" onerror="this.parentElement.innerHTML='<div class=\'placeholder\'>Photo</div>'">
+    </div>
     <div class="gallery-slot">
       <img src="https://raw.githubusercontent.com/elettro/cassie-magrath/main/images/cassie-magrath-%20(3).jpeg" alt="Cassie Magrath Headshot" onerror="this.parentElement.innerHTML='<div class=\'placeholder\'>Photo</div>'">
     </div>
@@ -963,6 +970,22 @@
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
+
+  // Rotate top headshot image
+  const heroRotationImages = [
+    "images/cassie-magrath- (1).jpeg",
+    "images/cassie-magrath- (2).jpg",
+    "images/cassie-magrath- (1).jpg"
+  ];
+
+  const heroImage = document.getElementById("hero-rotating-image");
+  if (heroImage) {
+    let heroImageIndex = 0;
+    setInterval(() => {
+      heroImageIndex = (heroImageIndex + 1) % heroRotationImages.length;
+      heroImage.src = heroRotationImages[heroImageIndex];
+    }, 4000);
+  }
 </script>
 
 </body>
